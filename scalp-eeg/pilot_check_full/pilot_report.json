@@ -1,0 +1,89 @@
+{
+ "sample": "pilot",
+ "participants": [
+  "LTP063",
+  "LTP065",
+  "LTP066"
+ ],
+ "primary": {
+  "n": 3,
+  "mean": 0.013283194033109846,
+  "median": -7.592459891903047e-06,
+  "wilcoxon_W": 3.0,
+  "p_one_sided": 0.625
+ },
+ "decision": {
+  "verdict": "ambiguous",
+  "present_but_negligible": false,
+  "ci95": [
+   -0.0016163614345395547,
+   0.03814783156596083
+  ],
+  "robust_ci95": [
+   -0.0008772141256810565,
+   0.03980285787020016
+  ],
+  "ci90": [
+   -0.0012281573570784208,
+   0.03261008800561344
+  ],
+  "below_sesoi": false
+ },
+ "secondary_recognition": {
+  "n": 3,
+  "median_slope": 0.20101331211085255,
+  "p_one_sided": null
+ },
+ "controls": {
+  "eog": {
+   "mean_delta_eog": 0.006831744064405047,
+   "eeg_minus_eog": {
+    "mean_difference": 0.006451449968704799,
+    "wilcoxon_p_one_sided": null
+   }
+  },
+  "neighbour": {
+   "mean_delta_own": 0.015004040295374055,
+   "mean_delta_prev": 0.007356049717821815,
+   "own_minus_prev": {
+    "mean_difference": 0.00764799057755224,
+    "wilcoxon_p_one_sided": null
+   }
+  }
+ },
+ "per_participant": {
+  "LTP063": {
+   "nonneural": 0.6350011227416716,
+   "eeg": 0.5056552108352999,
+   "combined": 0.6340492842816347,
+   "robust_combined": 0.634444192127107,
+   "delta_auc": -0.0009518384600369911,
+   "delta_auc_robust": -0.0005569306145646324,
+   "delta_auc_eog": 0.0002136743229976812,
+   "eeg_perm_p": 0.14285714285714285,
+   "n_sessions": 20
+  },
+  "LTP065": {
+   "nonneural": 0.6938698478832583,
+   "eeg": 0.5430309895289132,
+   "combined": 0.6938622554233664,
+   "robust_combined": 0.696972813931947,
+   "delta_auc": -7.592459891903047e-06,
+   "delta_auc_robust": 0.003102966048688649,
+   "delta_auc_eog": -0.0012708331676248852,
+   "eeg_perm_p": 0.047619047619047616,
+   "n_sessions": 20
+  },
+  "LTP066": {
+   "nonneural": 0.6620300259259224,
+   "eeg": 0.6661578870227703,
+   "combined": 0.7028390389451808,
+   "robust_combined": 0.7042458915032668,
+   "delta_auc": 0.04080901301925843,
+   "delta_auc_robust": 0.04221586557734436,
+   "delta_auc_eog": 0.021552391037842344,
+   "eeg_perm_p": 0.047619047619047616,
+   "n_sessions": 20
+  }
+ }
+}
