@@ -9,7 +9,7 @@ The long-term idea is a *Personalized Neural Memory Signature* (PNMS): a persona
 | Test | Data | Status | Verdict by the frozen rule |
 | --- | --- | --- | --- |
 | Scalp EEG at study predicts later recall | PEERS ltpFR, 20 people ([OpenNeuro ds004395](https://openneuro.org/datasets/ds004395)) | Done 23 Oct 2026, pre-registered at [osf.io/9ghzn](https://osf.io/9ghzn/overview) | **Failure: present but negligible** |
-| Same test with electrodes inside the brain | RAM FR1 iEEG, 20 people ([OpenNeuro ds004789](https://openneuro.org/datasets/ds004789)) | Running, addendum registered at [osf.io/xn4v9](https://osf.io/xn4v9) | Pending |
+| Same test with electrodes inside the brain | RAM FR1 iEEG, 20 people ([OpenNeuro ds004789](https://openneuro.org/datasets/ds004789)) | Done 31 Oct 2026, addendum registered at [osf.io/xn4v9](https://osf.io/xn4v9) | **Ambiguous** |
 | Is the signal personal and stable? (exploratory) | Same 23 PEERS people | Done 23 Oct 2026, not pre-registered | Hints only |
 
 **Scalp EEG, in numbers.** The score used is AUC (0.5 = coin flip, 1.0 = perfect). Adding brain data to a strong non-brain model raised it by a mean ΔAUC of **0.005** (95% CI 0.002 to 0.009; one-sided Wilcoxon p = 5×10⁻⁵). The pre-set smallest useful gain was 0.01, so the effect is real but too small. Other checks:
@@ -18,6 +18,16 @@ The long-term idea is a *Personalized Neural Memory Signature* (PNMS): a persona
 - The previous word's EEG gave about 0, so the gain is tied to the word being studied.
 - A personal model beat a model pooled across other people in 19 of 20 people (AUC 0.562 vs 0.537; Holm-corrected p = 0.0002).
 - Deviation from the plan: 5 sessions were skipped for duplicate event times.
+
+**In-brain iEEG, in numbers.** The mean ΔAUC was **0.007** (95% CI -0.004 to 0.024; one-sided Wilcoxon p = 0.10). The interval includes both 0 and the smallest useful gain of 0.01, so the frozen rule calls it **ambiguous**: these 20 people are not enough to decide. Other checks:
+
+- The brain-only model scored a mean AUC of 0.570. Its permutation test passed (p < 0.05) in 9 of 20 people.
+- The previous word's brain data added less (0.003 against 0.009; p = 0.06).
+- Deviations from the plan:
+  - 6 of the 20 planned people had fewer than 3 usable sessions and were replaced by the next people in the registered shuffled order.
+  - 2 of those replacements came from beyond the 5 named reserves.
+  - 9 sessions failed the frozen data checks.
+- Full details are in [`in-brain-ieeg/confirmatory/RESULT.md`](in-brain-ieeg/confirmatory/RESULT.md).
 
 **Exploratory (treat as hints).**
 

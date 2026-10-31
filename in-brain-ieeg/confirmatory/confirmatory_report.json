@@ -1,0 +1,284 @@
+{
+ "sample": "confirmatory",
+ "participants": [
+  "R1067P",
+  "R1092J",
+  "R1147P",
+  "R1123C",
+  "R1151E",
+  "R1195E",
+  "R1111M",
+  "R1292E",
+  "R1377M",
+  "R1145J",
+  "R1222M",
+  "R1121M",
+  "R1384J",
+  "R1441T",
+  "R1217T",
+  "R1243T",
+  "R1345D",
+  "R1060M",
+  "R1125T",
+  "R1391T"
+ ],
+ "primary": {
+  "n": 20,
+  "mean": 0.007213038269626895,
+  "median": 0.007342580341173632,
+  "wilcoxon_W": 140.0,
+  "p_one_sided": 0.10122489929199219
+ },
+ "decision": {
+  "verdict": "ambiguous",
+  "present_but_negligible": false,
+  "ci95": [
+   -0.0038171626207067063,
+   0.023577775480804454
+  ],
+  "robust_ci95": [
+   -0.003676804217067226,
+   0.02352717629595361
+  ],
+  "ci90": [
+   -0.001329104894089843,
+   0.021560528847095122
+  ],
+  "below_sesoi": false
+ },
+ "secondary_recognition": {
+  "note": "not applicable: FR1 has no recognition test"
+ },
+ "controls": {
+  "neighbour": {
+   "mean_delta_own": 0.008838219583855427,
+   "mean_delta_prev": 0.0033890717201767394,
+   "own_minus_prev": {
+    "mean_difference": 0.005449147863678688,
+    "wilcoxon_p_one_sided": 0.06154632568359375
+   }
+  }
+ },
+ "per_participant": {
+  "R1067P": {
+   "nonneural": 0.4712692967409949,
+   "eeg": 0.4993448637316562,
+   "combined": 0.4649442538593482,
+   "robust_combined": 0.46116828663998477,
+   "delta_auc": -0.006325042881646703,
+   "delta_auc_robust": -0.01010101010101011,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.13432835820895522,
+   "n_sessions": 3
+  },
+  "R1092J": {
+   "nonneural": 0.579131819992035,
+   "eeg": 0.5443170051772203,
+   "combined": 0.636905615292712,
+   "robust_combined": 0.6313898845081641,
+   "delta_auc": 0.057773795300676944,
+   "delta_auc_robust": 0.05225806451612913,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.05472636815920398,
+   "n_sessions": 4
+  },
+  "R1147P": {
+   "nonneural": 0.6936097539884993,
+   "eeg": 0.6004366812227074,
+   "combined": 0.6221410350642052,
+   "robust_combined": 0.6251026849409832,
+   "delta_auc": -0.07146871892429418,
+   "delta_auc_robust": -0.06850706904751613,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 3
+  },
+  "R1123C": {
+   "nonneural": 0.4934543918918919,
+   "eeg": 0.5821537162162163,
+   "combined": 0.5099577702702702,
+   "robust_combined": 0.5127111486486486,
+   "delta_auc": 0.01650337837837834,
+   "delta_auc_robust": 0.019256756756756754,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.014925373134328358,
+   "n_sessions": 3
+  },
+  "R1151E": {
+   "nonneural": 0.6520037900056148,
+   "eeg": 0.6137089416058394,
+   "combined": 0.6814816114542392,
+   "robust_combined": 0.6716819904548007,
+   "delta_auc": 0.02947782144862443,
+   "delta_auc_robust": 0.01967820044918589,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.10945273631840796,
+   "n_sessions": 3
+  },
+  "R1195E": {
+   "nonneural": 0.5615074275320072,
+   "eeg": 0.6176803246192952,
+   "combined": 0.5817086821669271,
+   "robust_combined": 0.5781639887129498,
+   "delta_auc": 0.02020125463491984,
+   "delta_auc_robust": 0.01665656118094261,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 3
+  },
+  "R1111M": {
+   "nonneural": 0.6344177949709865,
+   "eeg": 0.6645996131528047,
+   "combined": 0.6581392649903288,
+   "robust_combined": 0.6564758220502901,
+   "delta_auc": 0.023721470019342328,
+   "delta_auc_robust": 0.0220580270793036,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 4
+  },
+  "R1292E": {
+   "nonneural": 0.5448404325654397,
+   "eeg": 0.5063039341378299,
+   "combined": 0.5268226217237078,
+   "robust_combined": 0.5054128171370422,
+   "delta_auc": -0.01801781084173193,
+   "delta_auc_robust": -0.039427615428397456,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.4626865671641791,
+   "n_sessions": 3
+  },
+  "R1377M": {
+   "nonneural": 0.7325742849208553,
+   "eeg": 0.5645291766779759,
+   "combined": 0.7583400746169542,
+   "robust_combined": 0.7473648624174443,
+   "delta_auc": 0.025765789696098884,
+   "delta_auc_robust": 0.014790577496588964,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.13930348258706468,
+   "n_sessions": 4
+  },
+  "R1145J": {
+   "nonneural": 0.5291526694196974,
+   "eeg": 0.5047914424528335,
+   "combined": 0.530772166653486,
+   "robust_combined": 0.5343618802672343,
+   "delta_auc": 0.0016194972337886249,
+   "delta_auc_robust": 0.005209210847536894,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.48756218905472637,
+   "n_sessions": 4
+  },
+  "R1222M": {
+   "nonneural": 0.5849635099537936,
+   "eeg": 0.5475018352981821,
+   "combined": 0.5704214708295547,
+   "robust_combined": 0.5791985144880598,
+   "delta_auc": -0.014542039124238904,
+   "delta_auc_robust": -0.005764995465733835,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.01990049751243781,
+   "n_sessions": 3
+  },
+  "R1121M": {
+   "nonneural": 0.5857138117514349,
+   "eeg": 0.5039094035809474,
+   "combined": 0.5907235990843038,
+   "robust_combined": 0.5913318514094865,
+   "delta_auc": 0.005009787332868942,
+   "delta_auc_robust": 0.005618039658051632,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.3880597014925373,
+   "n_sessions": 8
+  },
+  "R1384J": {
+   "nonneural": 0.6482454653331073,
+   "eeg": 0.6705543312425836,
+   "combined": 0.6786573995592473,
+   "robust_combined": 0.6840481437531786,
+   "delta_auc": 0.03041193422613997,
+   "delta_auc_robust": 0.03580267842007123,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 3
+  },
+  "R1441T": {
+   "nonneural": 0.5937802197802198,
+   "eeg": 0.5028131868131868,
+   "combined": 0.5910989010989012,
+   "robust_combined": 0.6005934065934067,
+   "delta_auc": -0.0026813186813186007,
+   "delta_auc_robust": 0.006813186813186878,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.6069651741293532,
+   "n_sessions": 3
+  },
+  "R1217T": {
+   "nonneural": 0.5556841563786008,
+   "eeg": 0.566731579463061,
+   "combined": 0.5978958455810308,
+   "robust_combined": 0.5968425436018028,
+   "delta_auc": 0.042211689202430014,
+   "delta_auc_robust": 0.041158387223201975,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.009950248756218905,
+   "n_sessions": 3
+  },
+  "R1243T": {
+   "nonneural": 0.5904988566226281,
+   "eeg": 0.6538326439616053,
+   "combined": 0.6306926931375851,
+   "robust_combined": 0.6431372267901562,
+   "delta_auc": 0.040193836514957004,
+   "delta_auc_robust": 0.05263837016752804,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 3
+  },
+  "R1345D": {
+   "nonneural": 0.5916508101251224,
+   "eeg": 0.6028022833419825,
+   "combined": 0.6013261834746008,
+   "robust_combined": 0.606135040073805,
+   "delta_auc": 0.009675373349478322,
+   "delta_auc_robust": 0.014484229948682592,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.004975124378109453,
+   "n_sessions": 4
+  },
+  "R1060M": {
+   "nonneural": 0.4864669823559938,
+   "eeg": 0.4968498637778931,
+   "combined": 0.4828587182148417,
+   "robust_combined": 0.4762949208614427,
+   "delta_auc": -0.003608264141152062,
+   "delta_auc_robust": -0.010172061494551077,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.5223880597014925,
+   "n_sessions": 4
+  },
+  "R1125T": {
+   "nonneural": 0.5744292886236619,
+   "eeg": 0.5789049919484701,
+   "combined": 0.5385289381453064,
+   "robust_combined": 0.5456332291370655,
+   "delta_auc": -0.03590035047835549,
+   "delta_auc_robust": -0.02879605948659647,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.05970149253731343,
+   "n_sessions": 3
+  },
+  "R1391T": {
+   "nonneural": 0.8241676019453797,
+   "eeg": 0.5792742237186681,
+   "combined": 0.8184062850729519,
+   "robust_combined": 0.8368375109115849,
+   "delta_auc": -0.0057613168724278685,
+   "delta_auc_robust": 0.012669908966205123,
+   "delta_auc_eog": null,
+   "eeg_perm_p": 0.2537313432835821,
+   "n_sessions": 3
+  }
+ }
+}
