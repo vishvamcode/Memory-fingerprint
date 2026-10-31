@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory BCI Science Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: a lab notebook. One reading column, wide tables scroll on their own, tag pills carry the evidence level. */
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1b2330; --muted:#566173; --line:#d9dee6; --accent:#28507d;
+  --est:#1f6b46; --est-bg:#e3f2ea; --emg:#8a5a00; --emg-bg:#fbf0d9; --spec:#6a3d99; --spec-bg:#efe6f8; --unv:#a32b2b; --unv-bg:#fbe5e5;
+  --display:"IBM Plex Serif", Georgia, serif; --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161d; --surface:#18202a; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2c3846; --accent:#8db6e6;
+    --est:#7fd1a5; --est-bg:#173326; --emg:#f0c46a; --emg-bg:#3a2e12; --spec:#c9a6f0; --spec-bg:#2d2140; --unv:#f29a9a; --unv-bg:#3d1c1c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#18202a; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2c3846; --accent:#8db6e6;
+  --est:#7fd1a5; --est-bg:#173326; --emg:#f0c46a; --emg-bg:#3a2e12; --spec:#c9a6f0; --spec-bg:#2d2140; --unv:#f29a9a; --unv-bg:#3d1c1c;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+main{max-width:980px;margin:0 auto;padding:32px 20px 80px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.5rem;padding-top:8px;border-top:2px solid var(--accent)}
+h3{font-size:1.15rem;margin-top:6px}
+p,li{max-width:72ch}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.25rem;display:flex;flex-direction:column;gap:4px}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:14px}
+.meta{color:var(--muted);font-size:.92rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.box.key{border-left:4px solid var(--accent)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:720px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:600;background:var(--bg);position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.02em;padding:1px 6px;border-radius:4px;white-space:nowrap;vertical-align:1px}
+.E{color:var(--est);background:var(--est-bg)}
+.M{color:var(--emg);background:var(--emg-bg)}
+.S{color:var(--spec);background:var(--spec-bg)}
+.U{color:var(--unv);background:var(--unv-bg)}
+.h{display:inline-block;font-size:.72rem;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+code{font-family:var(--mono);font-size:.85em}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.88rem;color:var(--muted)}
+nav ol{flex-direction:row;flex-wrap:wrap;gap:6px 16px;list-style:none;padding:0}
+pre{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;margin:0;line-height:1.45}
+.refs li{font-size:.88rem}
+</style>
+</head>
+<body>
+<main>
+
+<header style="display:flex;flex-direction:column;gap:10px">
+<h1>Memory BCI science foundation (Run 1)</h1>
+<p class="meta">Neuro memory idea · Run 1 of 5 · written 31 Oct 2026 · deliverables D1–D5. Every paper below was checked on the web this run unless marked <span class="t U">UNVERIFIED</span>. Links go to the page I checked.</p>
+<div class="legend">
+<span><span class="t E">ESTABLISHED</span> replicated</span>
+<span><span class="t M">EMERGING</span> a few studies</span>
+<span><span class="t S">SPECULATIVE</span> your idea or my extrapolation</span>
+<span><span class="t U">UNVERIFIED</span> could not confirm</span>
+<span><span class="h">now</span> <span class="h">~5 yrs</span> <span class="h">20+ yrs</span> <span class="h">maybe never</span> time horizon</span>
+</div>
+<p class="meta"><strong>Assumption to correct:</strong> hours/week and compute were not given, so I assume about 10 h/week and a laptop plus free cloud CPU (no GPU). Tell me the real numbers and Run 2 will rescale.</p>
+<nav><ol>
+<li><a href="#bottom-line">Bottom line</a></li>
+<li><a href="#d1">D1 Region ranking</a></li>
+<li><a href="#d2">D2 Hippocampus cheat sheet</a></li>
+<li><a href="#d3">D3 Neuralink lens</a></li>
+<li><a href="#d4">D4 Toolkit table</a></li>
+<li><a href="#d5">D5 Evidence map</a></li>
+<li><a href="#d6">1.6 Activate/deactivate</a></li>
+<li><a href="#hyp">Your hypotheses, scored</a></li>
+<li><a href="#refs">Sources</a></li>
+</ol></nav>
+</header>
+
+<section id="bottom-line">
+<h2>Bottom line (read this if nothing else)</h2>
+<div class="box key">
+<ul>
+<li><strong>Pick:</strong> the hippocampus and entorhinal cortex as the place to <em>read</em> memory content (single neurons), and the lateral temporal cortex as the place where <em>writing</em> with today's electrodes has actually helped memory. "One region" is the wrong frame: a memory is an index in the hippocampus plus content spread over cortex. Triangulate on a <strong>loop</strong>, not a spot.</li>
+<li><strong>Why Ezzyat 2018 skipped the hippocampus:</strong> a 49-patient study (Jacobs 2016) found that stimulating the hippocampus or entorhinal region during learning made recall <em>worse</em> by about 8–9%. Lateral temporal cortex was the site where stimulation helped, and it has many clinical electrodes.</li>
+<li><strong>Writing a specific memory has only been done in mice</strong> (engram reactivation, holographic optogenetics). In humans, what works today is nudging the <em>state</em> (closed-loop stimulation at bad-encoding moments, sleep cueing), with effects of roughly 10–35%. Content-specific writing in humans has one small, mixed study (Roeder 2024).</li>
+<li><strong>Neuralink records cortex, not hippocampus.</strong> 21 participants were confirmed in Jan 2026. Its data is not public. The public equivalents that matter for you are on DANDI (human hippocampus/amygdala single neurons) and OpenNeuro (the RAM data you already use).</li>
+<li><strong>Your idea has names already:</strong> "neural co-processor" (Rajesh Rao, 2019) and "hippocampal prosthesis" (Berger/Hampson/Song). Use them in outreach.</li>
+<li><strong>Bluntly on H-Bridge:</strong> your scalp classifier is the noninvasive cousin of Ezzyat's decoder, but your confirmatory result (ΔAUC 0.005 over behaviour, about half matched by eye channels) says scalp EEG is far too weak to trigger stimulation. Ezzyat's in-brain decoder reached AUC 0.61. That gap is a finding to report, not a failure to hide.</li>
+</ul>
+</div>
+</section>
+
+<section id="d1">
+<h2>D1 · Region triangulation: ranked table and pick</h2>
+<p>Score 1–5 in bold in each of the four columns, summed out of 20 (5 best for a computer-only researcher who wants to read and, later, write memory). Scores are my judgement from the evidence in D5 <span class="t S">SPECULATIVE</span>; the evidence notes are tagged.</p>
+<div class="tbl"><table>
+<thead><tr><th>#</th><th>Region</th><th>Role in memory · words · emotion</th><th>Human recording access</th><th>Stimulation evidence</th><th>Public data</th><th>Total /20</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>Hippocampus</strong> (DG, CA3, CA1)</td><td><b>5</b> · Fast binding of episodes; index for cortical content <span class="t E">ESTABLISHED</span>. Concept cells respond to people/places/words <span class="t E">ESTABLISHED</span>. Emotion via amygdala input.</td><td><b>5</b> · standard SEEG target in epilepsy; microwires give single neurons (Faraut 2018, Kyzar 2024); Neuropixels reached it under anaesthesia (Katlowitz 2026)</td><td><b>2</b> · macro stimulation during learning impairs (Jacobs 2016) <span class="t E">ESTABLISHED</span>; patterned MIMO stimulation helped in 8 patients (Hampson 2018) <span class="t M">EMERGING</span></td><td><b>5</b> · DANDI 000004, 000469; RAM iEEG</td><td class="num">17</td></tr>
+<tr><td>2</td><td><strong>Lateral temporal cortex</strong> (incl. middle temporal gyrus)</td><td><b>4</b> · Semantic store for word meaning (Huth 2016 maps) <span class="t E">ESTABLISHED</span>; encoding activity predicts recall</td><td><b>4</b> · many SEEG/ECoG contacts; single neurons rarely</td><td><b>5</b> · closed-loop stim improved recall 15% (Ezzyat 2018, n=25); best region in Kucewicz 2018 <span class="t M">EMERGING</span> (one consortium)</td><td><b>4</b> · RAM iEEG (you already have it)</td><td class="num">17</td></tr>
+<tr><td>3</td><td><strong>Amygdala</strong></td><td><b>3</b> · Emotional tagging: boosts consolidation of arousing events (McGaugh 2004) <span class="t E">ESTABLISHED</span></td><td><b>4</b> · common SEEG target; single neurons in DANDI sets</td><td><b>4</b> · brief stimulation after an image improved next-day recognition, d=0.99, n=14 (Inman 2018) <span class="t M">EMERGING</span></td><td><b>4</b> · DANDI 000004, 000469 include amygdala</td><td class="num">15</td></tr>
+<tr><td>4</td><td><strong>Entorhinal cortex</strong></td><td><b>4</b> · Main gateway between cortex and hippocampus; grid/time cells (Umbach 2020) <span class="t M">EMERGING</span> in humans</td><td><b>4</b> · often sampled by MTL depth electrodes, fewer contacts than hippocampus</td><td><b>3</b> · helped in Suthana 2012 and in micro-stimulation of white matter (Titiz 2017) <span class="t M">EMERGING</span>; impaired in Jacobs 2016</td><td><b>3</b> · inside RAM and some DANDI sets, few units</td><td class="num">14</td></tr>
+<tr><td>5</td><td><strong>Prefrontal cortex</strong></td><td><b>3</b> · Control of encoding/retrieval, strategy; partner of hippocampus in sleep <span class="t E">ESTABLISHED</span></td><td><b>3</b> · ECoG/SEEG contacts; noninvasive access easy</td><td><b>4</b> · closed-loop sleep stimulation of prefrontal white matter improved recognition (Geva-Sagiv 2023) <span class="t M">EMERGING</span>; HD-tACS in older adults (Grover 2022) <span class="t M">EMERGING</span></td><td><b>3</b> · RAM, DANDI 000469 (medial frontal)</td><td class="num">13</td></tr>
+<tr><td>6</td><td><strong>Perirhinal / parahippocampal</strong></td><td><b>3</b> · Items (perirhinal) vs places/context (parahippocampal) <span class="t E">ESTABLISHED</span> in rough form; PPA state predicted scene memory (Yoo 2012)</td><td><b>3</b> · sampled less often</td><td><b>2</b> · few targeted studies (Kucewicz 2018 included it, mixed)</td><td><b>2</b> · some RAM contacts</td><td class="num">10</td></tr>
+<tr><td>7</td><td><strong>Language areas</strong> (Broca, Wernicke)</td><td><b>1</b> · Producing and parsing words, not storing episodes <span class="t E">ESTABLISHED</span></td><td><b>3</b> · mapped in awake surgery</td><td><b>1</b> · stimulation disrupts speech (clinical mapping), no memory gain shown</td><td><b>3</b> · speech-BCI datasets exist (not checked this run <span class="t U">UNVERIFIED</span>)</td><td class="num">8</td></tr>
+</tbody></table></div>
+
+<div class="box key">
+<h3>Final pick</h3>
+<p><strong>Read side:</strong> hippocampus + entorhinal cortex at single-neuron level. It is where memory <em>content</em> is sparse and nameable (concept cells), where public human single-neuron data exists, and where every serious memory-prosthesis effort points. <span class="h">now</span> for analysis of public data.</p>
+<p><strong>Write side:</strong> lateral temporal cortex for state-based help (the only region with a positive closed-loop result in humans), plus amygdala and prefrontal (sleep) as runners-up. Writing into the hippocampus itself needs patterned, neuron-scale stimulation, not big pulses. <span class="h">~5 yrs</span> for patterned human trials, <span class="h">20+ yrs</span> for content.</p>
+<p><strong>Your Phase 1 consequence:</strong> analyse DANDI 000004 (59 subjects, hippocampus and amygdala, recognition memory) to ask your same question at neuron level. Its scale makes it the obvious next rung.</p>
+</div>
+
+<div class="box">
+<h3>Why Ezzyat 2018 stimulated lateral temporal cortex, not hippocampus</h3>
+<ol>
+<li><strong>Hippocampal stimulation had just failed.</strong> Jacobs 2016 (49 patients, 50 Hz during learning): recall dropped about 9% with entorhinal and 8% with hippocampal stimulation; no patient improved. Ezzyat et al. write that open-loop stimulation of the hippocampus and MTL "is unlikely to reliably improve memory".</li>
+<li><strong>Lateral temporal activity predicts memory.</strong> In fMRI and iEEG, activity there during learning predicts later recall, and the region holds word meaning.</li>
+<li><strong>Prior stimulation work pointed there</strong> (their phrase: "a prime target for memory modulation"), and in the same group's data lateral temporal stimulation beat other regions (Kucewicz 2018).</li>
+<li><strong>Practicality.</strong> Electrodes go where the epilepsy doctors need them; lateral temporal contacts are common, so they could be chosen in most of the 25 patients.</li>
+<li><strong>My interpretation</strong> <span class="t S">SPECULATIVE</span>: a large electrical pulse in the hippocampus scrambles a sparse code it is trying to write; in cortex it may instead push the network into a better encoding state. This is consistent with Titiz 2017 (gentle micro-stimulation of entorhinal white matter helped) but not proven.</li>
+</ol>
+</div>
+</section>
+
+<section id="d2">
+<h2>D2 · Hippocampus cheat sheet</h2>
+<pre>
+ neocortex (content: words, faces, places)          amygdala ── "this matters" tag
+        │  ▲                                          │ (boosts consolidation)
+        ▼  │                                          ▼
+   entorhinal cortex (EC layer II/III) ───────────────────────────┐
+        │ perforant path                                          │ direct path
+        ▼                                                         ▼
+   dentate gyrus (DG) ──mossy fibres──▶ CA3 (recurrent loops) ──Schaffer──▶ CA1 ──▶ subiculum ──▶ EC deep layers ──▶ cortex
+   "make it different"                  "complete it"                       "compare/output"
+   (pattern separation)                 (pattern completion, attractor)
+</pre>
+<div class="tbl"><table>
+<thead><tr><th>Concept</th><th>One-line meaning</th><th>Evidence</th><th>Key source</th></tr></thead>
+<tbody>
+<tr><td>Circuit EC → DG → CA3 → CA1 → EC</td><td>The trisynaptic loop above; CA1 also gets direct EC input</td><td><span class="t E">ESTABLISHED</span> anatomy</td><td>Textbook anatomy (no single paper)</td></tr>
+<tr><td>Pattern separation (DG)</td><td>Similar experiences get stored as different patterns so they don't overwrite each other</td><td><span class="t E">ESTABLISHED</span> rodents; <span class="t M">EMERGING</span> humans (fMRI signal in CA3/DG)</td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2829853">Bakker et al. 2008, Science</a></td></tr>
+<tr><td>Pattern completion (CA3)</td><td>A partial cue rebuilds the whole stored pattern through recurrent connections</td><td><span class="t E">ESTABLISHED</span> as theory + rodent data</td><td>Hopfield-type attractor theory; same 2008 paper shows the human counterpart</td></tr>
+<tr><td>Physics view</td><td>CA3 ≈ a Hopfield network: memories are energy minima. Dense random patterns: capacity ≈ 0.14 × N patterns; sparse codes store many more. Overload causes spurious mixed memories.</td><td><span class="t E">ESTABLISHED</span> theory; mapping to real CA3 <span class="t M">EMERGING</span></td><td>Standard result (Amit, Gutfreund, Sompolinsky); source not link-checked this run</td></tr>
+<tr><td>Indexing theory</td><td>Hippocampus stores a short "pointer" to cortical pieces, not the content itself</td><td><span class="t M">EMERGING</span> (strong support from engram work)</td><td><a href="https://zendy.io/title/10.1002/hipo.20350">Teyler &amp; Rudy 2007 update</a> of Teyler &amp; DiScenna 1986</td></tr>
+<tr><td>Complementary learning systems</td><td>Fast hippocampus learns one-shot; slow cortex learns structure; replay teaches cortex without catastrophic forgetting</td><td><span class="t E">ESTABLISHED</span> framework</td><td><a href="https://stanford.edu/%7Ejlmcc/papers/McCMcNaughtonOReilly95.pdf">McClelland, McNaughton &amp; O'Reilly 1995</a></td></tr>
+<tr><td>Replay</td><td>Cells that fired together while awake fire together again in sleep</td><td><span class="t E">ESTABLISHED</span> rodents</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/8036517/">Wilson &amp; McNaughton 1994</a></td></tr>
+<tr><td>Replay is causal</td><td>Blocking sharp-wave ripples in sleep impairs spatial memory</td><td><span class="t E">ESTABLISHED</span> rodents</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/19749750/">Girardeau et al. 2009</a></td></tr>
+<tr><td>Sleep consolidation in humans</td><td>Slow waves, spindles and ripples coordinate; boosting their coupling helps</td><td><span class="t M">EMERGING</span></td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10244181">Geva-Sagiv et al. 2023</a></td></tr>
+<tr><td>Concept cells</td><td>Single MTL neurons fire for one person/place regardless of photo, drawing or written name</td><td><span class="t E">ESTABLISHED</span> (many follow-ups)</td><td><a href="https://papers.baulab.info/papers/Quiroga-2005.pdf">Quian Quiroga et al. 2005, Nature</a></td></tr>
+<tr><td>Place cells (human)</td><td>Neurons fire at specific locations in a virtual town</td><td><span class="t E">ESTABLISHED</span> rodents; <span class="t M">EMERGING</span> human</td><td><a href="https://ideas.repec.org/a/nat/nature/v425y2003i6954d10.1038_nature01964.html">Ekstrom et al. 2003</a></td></tr>
+<tr><td>Time cells (human)</td><td>Neurons fire at moments within a list; support order memory</td><td><span class="t M">EMERGING</span></td><td><a href="https://jacobslab.bme.columbia.edu/sites/default/files/content/pubs/UmbachEtal20.pdf">Umbach et al. 2020, PNAS</a></td></tr>
+<tr><td>Engrams</td><td>The specific cells active at learning; reactivating them recalls the memory</td><td><span class="t E">ESTABLISHED</span> mice; untested in humans</td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7577560/">Josselyn &amp; Tonegawa 2020 review</a></td></tr>
+<tr><td>Systems consolidation</td><td>Cortical engram forms early but "matures" while the hippocampal one fades</td><td><span class="t M">EMERGING</span></td><td><a href="https://pubmed.ncbi.nlm.nih.gov/28386011/">Kitamura et al. 2017</a></td></tr>
+<tr><td>Representational drift</td><td>Same place, same behaviour, but which CA1 cells code it changes over days</td><td><span class="t E">ESTABLISHED</span> mice; your SP3 shows a scalp analogue <span class="t M">EMERGING</span></td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3784308">Ziv et al. 2013</a></td></tr>
+<tr><td>Words plug in</td><td>Meanings tile lateral/anterior temporal and other cortex; hippocampus binds them into an episode ("this word, this list")</td><td><span class="t E">ESTABLISHED</span></td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4852309">Huth et al. 2016</a></td></tr>
+<tr><td>Emotion plugs in</td><td>Amygdala activity (and stress hormones) up-weights consolidation of arousing events</td><td><span class="t E">ESTABLISHED</span></td><td><a href="https://pubmed.ncbi.nlm.nih.gov/15217324/">McGaugh 2004</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5776809">Inman 2018</a></td></tr>
+</tbody></table></div>
+<p class="meta">How this maps to your work: your scalp EEG project measures encoding <em>state</em> in cortex; RAM iEEG measures cortex + MTL field potentials; DANDI single neurons measure the index itself.</p>
+</section>
+
+<section id="d3">
+<h2>D3 · The Neuralink lens</h2>
+<div class="grid2">
+<div class="box">
+<h3>Hardware (public facts)</h3>
+<ul>
+<li>N1 "Link": <strong>1,024 electrodes on 64 threads</strong> (company figures, via <a href="https://www.insidedeeptech.com/neuralink-n1-implant-r1-robot-clinical-trials-full-guide/">this guide</a>) <span class="t E">ESTABLISHED</span> as reported.</li>
+<li>2019 research system: up to 3,072 electrodes, 32 per thread, 256 amplifiers per chip, ~19 kHz, 10-bit; spike detection by simple <strong>threshold crossings, no spike sorting</strong>, done in software (<a href="https://www.jmir.org/2019/10/e16194">Musk 2019, JMIR</a>).</li>
+<li>Whether N1 detects spikes <em>on the chip</em>, and its exact radio bandwidth: <span class="t U">UNVERIFIED</span> (not in the sources I could open).</li>
+<li>Why that matters (my arithmetic <span class="t S">SPECULATIVE</span>): 1,024 ch × 19.3 kHz × 10 bit ≈ 200 Mbit/s raw. A low-power implant radio carries a tiny fraction of that, so the chip must cut data ~100–1000×. Neuralink ran a public challenge for &gt;200× lossless compression (<a href="https://en.wikipedia.org/wiki/Neuralink">Wikipedia</a>). Threshold crossings (spike yes/no per channel per ms) are the cheap answer; sorting spikes into neurons is the expensive one they skip.</li>
+</ul>
+</div>
+<div class="box">
+<h3>Where it goes and why cortex</h3>
+<ul>
+<li>Threads go into <strong>motor cortex</strong> for movement intent (PRIME/CONVOY etc.); the exact target (hand knob) <span class="t U">UNVERIFIED</span>.</li>
+<li>Why not hippocampus: (1) the medical need (paralysis) lives in motor cortex; (2) threads are a few mm long, the hippocampus sits ~4–5 cm deep, below cortex the robot can see; (3) deep insertion crosses more vessels and tissue, so more risk; (4) movement decoding works from surface layers.</li>
+<li>The 2019 paper says deeper insertion is possible, but only cortical results were shown.</li>
+</ul>
+</div>
+<div class="box">
+<h3>Trial status</h3>
+<ul>
+<li><strong>21 participants</strong> enrolled worldwide, reported by Neuralink in late Jan 2026 (<a href="https://finance.yahoo.com/news/elon-musks-neuralink-says-21-182925000.html">Bloomberg via Yahoo</a>; <a href="https://www.technology.org/2026/01/29/neuralink-brain-chips-connect-21-minds-to-machines/">Technology.org</a>) <span class="t E">ESTABLISHED</span> as company report.</li>
+<li>"26th patient" by June 2026: from one X post relayed by a blog (<a href="https://www.basenor.com/blogs/news/neuralink-reaches-26th-patient-in-ongoing-brain-computer-interface-trials">basenor</a>) <span class="t U">UNVERIFIED</span>.</li>
+<li>"Next-gen implant with ~3× channels" (16 Oct 2026): fan site with AI-generated label (<a href="https://www.allthings-elon.com/articles/neuralink-n2-implant-more-channels-unveiled-2026-10-16">allthings-elon</a>) <span class="t U">UNVERIFIED</span>.</li>
+<li>Registered trials: PRIME (NCT06429735), CAN-PRIME (NCT06700304), UAE-PRIME (NCT06992596), GB-PRIME (NCT07127172), CONVOY (NCT06710626), VOICE speech (NCT07224256), as listed in the <a href="https://www.insidedeeptech.com/neuralink-n1-implant-r1-robot-clinical-trials-full-guide/">guide</a>; I did not open ClinicalTrials.gov itself.</li>
+<li>Blindsight: FDA breakthrough designation Sept 2024; Musk said in Jan 2026 it was ready for a first human (<a href="https://www.indiatvnews.com/science/neuralink-ready-for-first-human-implant-of-vision-restoring-brain-device-says-elon-musk-2026-01-29-1027988">India TV</a>). A completed human Blindsight implant: <span class="t U">UNVERIFIED</span>.</li>
+</ul>
+</div>
+<div class="box">
+<h3>Is their data public?</h3>
+<p><strong>No public Neuralink human dataset found</strong>; the performance numbers come from their own blog posts. Public equivalents:</p>
+<ul>
+<li><a href="https://dandiarchive.org/dandiset/000004">DANDI 000004</a>: human hippocampus + amygdala single neurons, recognition memory, 59 subjects, 6.2 GB, CC-BY-4.0 (paper: <a href="https://authors.library.caltech.edu/records/1frpm-7w987">Faraut 2018</a>, 1,576 neurons in its first release).</li>
+<li><a href="https://dandiarchive.org/dandiset/000469">DANDI 000469</a>: Sternberg working memory, 21 patients, 1,809 neurons, MTL + medial frontal (<a href="https://link.springer.com/10.1038/s41597-024-02943-8">Kyzar 2024</a>).</li>
+<li>Movie-watching neurons + iEEG + fMRI, 20 patients (<a href="https://doaj.org/article/6bfe334d1e89423fa22a175ea9192f8c">Keles 2024</a>); archive ID <span class="t U">UNVERIFIED</span>.</li>
+<li>Human Neuropixels cortex data (<a href="https://datadryad.org/dataset/doi:10.5061/dryad.d2547d840">Paulk 2022 on Dryad</a>).</li>
+<li>Penn RAM iEEG (<a href="https://memory.psych.upenn.edu/RAM_Public_Data">RAM public data</a>; your OpenNeuro ds004789 copy).</li>
+<li>Allen mouse Neuropixels (<a href="https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels">Visual Coding Neuropixels</a>).</li>
+</ul>
+</div>
+</div>
+
+<div class="box key">
+<h3>Reaching deep structures: what it would take</h3>
+<ul>
+<li><strong>Today's clinical route:</strong> SEEG depth leads in epilepsy patients; Behnke-Fried microwires at the tip give single neurons in hippocampus/amygdala (all the DANDI data). <span class="h">now</span></li>
+<li><strong>Neuropixels in humans:</strong> cortex first (<a href="https://bibliography.cumc.columbia.edu/node/54671">Paulk 2022</a>, <a href="https://changlab.ucsf.edu/s/1-s20-S0896627322004482-main.pdf">Chung 2022</a>), then 45 mm probes reaching hippocampus and cingulate in 9 patients during surgery (<a href="https://arxiv.org/abs/2601.09912">Brown et al. 2026 preprint</a>), and hundreds of hippocampal neurons under anaesthesia (<a href="https://www.eurekalert.org/news-releases/1126792">Katlowitz et al. 2026, Nature</a>). All acute (minutes), not chronic. <span class="t M">EMERGING</span></li>
+<li><strong>Chronic deep, high-count recording</strong> (months, thousands of neurons in hippocampus) does not exist in humans. Needs flexible long probes, a safe trajectory through cortex, and a medical reason to be there (epilepsy, later perhaps dementia). <span class="h">~5 yrs</span> for small trials, <span class="h">20+ yrs</span> for routine.</li>
+</ul>
+<h3>If I were Neuralink's research-strategy team</h3>
+<ol>
+<li><strong>Beachhead = epilepsy.</strong> Patients already have hippocampal electrodes; a memory decoder there is a credible add-on. <span class="t S">SPECULATIVE</span></li>
+<li><strong>Data that would change minds:</strong> a hippocampal decoder that names <em>which</em> item is being encoded/recalled, holds up across days despite drift, and a stimulation that helps recall by a large margin in a pre-registered trial.</li>
+<li><strong>Most interesting part:</strong> closed-loop <em>sleep</em> stimulation (Geva-Sagiv 2023). It acts while the user does nothing, the effect is on consolidation, and the trigger is a simple slow-wave detector.</li>
+<li><strong>Channel budget question</strong> (a great project for you): how many hippocampal neurons do you need to decode item identity at a given accuracy? Compute it from DANDI data by subsampling neurons. That one curve tells an engineer how many channels to build.</li>
+</ol>
+</div>
+</section>
+
+<section id="d4">
+<h2>D4 · Read/write toolkit</h2>
+<p class="meta">Resolutions are typical orders of magnitude from standard methods knowledge <span class="t E">ESTABLISHED</span>, not from one paper.</p>
+<div class="tbl"><table>
+<thead><tr><th>Tool</th><th>Read / write</th><th>Spatial</th><th>Temporal</th><th>Invasive?</th><th>Used in humans?</th><th>Memory evidence</th></tr></thead>
+<tbody>
+<tr><td>EEG</td><td>Read</td><td>cm</td><td>ms</td><td>No</td><td>Yes</td><td>Predicts recall weakly; your ΔAUC 0.005 <span class="t E">ESTABLISHED</span> (state, not content)</td></tr>
+<tr><td>MEG</td><td>Read</td><td>~cm (better than EEG)</td><td>ms</td><td>No</td><td>Yes</td><td>Encoding/replay signatures <span class="t M">EMERGING</span></td></tr>
+<tr><td>fMRI</td><td>Read</td><td>1–3 mm</td><td>seconds</td><td>No</td><td>Yes</td><td>State-triggered learning (Yoo 2012); category reinstatement <span class="t E">ESTABLISHED</span></td></tr>
+<tr><td>iEEG / SEEG / ECoG</td><td>Read + write</td><td>mm–cm</td><td>ms</td><td>Yes (clinical)</td><td>Yes, epilepsy</td><td>Decoder AUC 0.61; closed-loop +15% (Ezzyat 2018)</td></tr>
+<tr><td>Microwires (Behnke-Fried)</td><td>Read (+ micro-stim)</td><td>single neurons</td><td>&lt;1 ms</td><td>Yes</td><td>Yes, epilepsy</td><td>Concept cells; Titiz 2017 micro-stim <span class="t M">EMERGING</span></td></tr>
+<tr><td>Utah array</td><td>Read + write</td><td>single neurons, 4×4 mm patch</td><td>&lt;1 ms</td><td>Yes</td><td>Yes, motor/speech BCI</td><td>Not used for memory (cortex surface only) <span class="t U">UNVERIFIED</span> exceptions</td></tr>
+<tr><td>Neuralink N1</td><td>Read (+ stim planned)</td><td>multi-unit per channel</td><td>&lt;1 ms</td><td>Yes</td><td>Yes, 21+ people</td><td>None for memory</td></tr>
+<tr><td>Neuropixels</td><td>Read</td><td>single neurons, ~1 cm shank</td><td>&lt;1 ms</td><td>Yes</td><td>Acute only (surgery)</td><td>Hippocampal language/plasticity under anaesthesia (Katlowitz 2026) <span class="t M">EMERGING</span></td></tr>
+<tr><td>Functional ultrasound</td><td>Read</td><td>~0.1–0.3 mm</td><td>~0.1 s</td><td>Needs skull window</td><td>Small studies <span class="t U">UNVERIFIED</span></td><td>None</td></tr>
+<tr><td>TMS</td><td>Write</td><td>~1 cm, surface</td><td>ms pulses</td><td>No</td><td>Yes</td><td>Parietal rTMS → +~30% associative recall via hippocampal network, n=16 (Wang 2014) <span class="t M">EMERGING</span></td></tr>
+<tr><td>tES (tDCS/tACS/TI)</td><td>Write</td><td>cm (TI: deeper, focal)</td><td>s–min</td><td>No</td><td>Yes</td><td>HD-tACS older adults, 1-month gains (Grover 2022); TI hippocampus, face-name memory, n=20 (Violante 2023) <span class="t M">EMERGING</span></td></tr>
+<tr><td>DBS (macro)</td><td>Write</td><td>mm–cm</td><td>ms</td><td>Yes</td><td>Yes</td><td>Hippocampal/EC during learning impairs (Jacobs 2016) <span class="t E">ESTABLISHED</span></td></tr>
+<tr><td>Microstimulation</td><td>Write</td><td>~100 µm</td><td>ms</td><td>Yes</td><td>Yes</td><td>EC white matter improves specificity (Titiz 2017); MIMO patterns (Hampson 2018) <span class="t M">EMERGING</span></td></tr>
+<tr><td>Optogenetics</td><td>Write (cell-type)</td><td>single cells (holographic)</td><td>ms</td><td>Gene therapy + light</td><td>One blind patient, retina (Sahel 2021)</td><td>Engram recall in mice only</td></tr>
+<tr><td>Focused ultrasound / sonogenetics</td><td>Write / deliver</td><td>mm, deep</td><td>s</td><td>No (FUS) / gene (sono)</td><td>FUS yes; sono no</td><td>FUS opens blood-brain barrier for Alzheimer's drug, 3 patients (<a href="https://www.ovid.com/journals/nejm/pdf/10.1056/nejmoa2308719~ultrasound-blood-brain-barrier-opening-and-aducanumab-in">Rezai 2024 NEJM</a>); memory effect of FUS neuromodulation <span class="t U">UNVERIFIED</span></td></tr>
+<tr><td>Closed-loop auditory sleep stimulation</td><td>Write (state)</td><td>whole brain</td><td>timed to slow waves</td><td>No</td><td>Yes</td><td>Ngo 2013 positive (n=11); Henin 2019 no memory effect (n=31) <span class="t M">EMERGING</span>, mixed</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="d5">
+<h2>D5 · Verified evidence map: reading and writing memory</h2>
+<div class="tbl"><table>
+<thead><tr><th>Line of work</th><th>Paper (checked)</th><th>Species · n</th><th>What was done</th><th>Effect size</th><th>Tag · horizon</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">Engram reactivation</td><td><a href="https://dspace.mit.edu/bitstream/1721.1/74651/1/Tonegawa_Optogenetic%20stimulation.pdf">Liu et al. 2012, Nature 484:381</a></td><td>Mice</td><td>Tagged DG cells active during fear learning with ChR2; light elsewhere</td><td class="num">~15% freezing with light vs ~60% in real context (up to ~35% bilateral)</td><td><span class="t E">ESTABLISHED</span> <span class="h">now (mice)</span></td></tr>
+<tr><td><a href="https://dspace.mit.edu/handle/1721.1/85964">Ramirez et al. 2013, Science</a></td><td>Mice</td><td>Paired a tagged engram with shock elsewhere: false fear memory</td><td>Qualitative (freezing in never-shocked context)</td><td><span class="t E">ESTABLISHED</span></td></tr>
+<tr><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4847731">Roy et al. 2016, Nature</a></td><td>Mouse models of early Alzheimer's</td><td>Engram activation recovered "lost" memories</td><td>See paper (not extracted)</td><td><span class="t M">EMERGING</span> · relevant to your MCI goal; <span class="h">maybe never</span> as-is in humans (needs gene + light)</td></tr>
+<tr><td rowspan="2">Implanted percepts (holographic)</td><td><a href="https://medicalxpress.com/news/2019-07-stanford-team-neurons-perceptions-mice.pdf">Marshel et al. 2019, Science</a> · <strong>Deisseroth lab, not Yuste</strong></td><td>Mice, V1</td><td>Stimulated orientation-tuned cells to make mice "see" a bar</td><td class="num">~20 neurons (sometimes fewer) enough</td><td><span class="t M">EMERGING</span></td></tr>
+<tr><td><a href="https://datascience.columbia.edu/news/2019/in-new-study-dsi-researchers-controlled-behavior-in-a-mouses-brain-with-single-cell-precision/">Carrillo-Reid et al. 2019, Cell</a> (Yuste lab)</td><td>Mice, V1</td><td>Re-activated a learned ensemble to trigger licking without the stimulus</td><td class="num">as few as 2 ensemble neurons</td><td><span class="t M">EMERGING</span> · tells you writing needs <em>the right</em> few cells, not many</td></tr>
+<tr><td rowspan="2">Hippocampal prosthesis</td><td><a href="https://newsroom.wakehealth.edu/news-releases/2018/03/prosthetic-memory-system-successful-in-humans-study-finds">Hampson et al. 2018, J Neural Eng</a></td><td>Humans · 8 stimulated</td><td>MIMO model of CA3→CA1 firing; replayed "correct" pattern into CA1</td><td class="num">+35–37% vs baseline (press release; paper figures not opened)</td><td><span class="t M">EMERGING</span> · one group, small n</td></tr>
+<tr><td><a href="https://public-pages-files-2025.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2024.1263311/text">Roeder et al. 2024, Front Comput Neurosci</a></td><td>Humans · n not in abstract</td><td>Memory decoding model aimed at image <em>categories</em></td><td class="num">22.4% of patient×category combinations changed significantly</td><td><span class="t M">EMERGING</span>, mixed · closest thing to content-specific writing in humans</td></tr>
+<tr><td rowspan="4">Closed-loop / direct stimulation</td><td><a href="https://blackrockneurotech.com/direct-brain-stimulation-modulates-encoding-states-and-memory-performance-in-humans">Ezzyat et al. 2017, Curr Biol 27:1251</a></td><td>Humans (epilepsy)</td><td>Stimulation helped in poor-encoding states, hurt in good states</td><td>Direction depends on state</td><td><span class="t M">EMERGING</span></td></tr>
+<tr><td><a href="https://link.springer.com/10.1038/s41467-017-02753-0">Ezzyat et al. 2018, Nat Commun</a></td><td>Humans · 25</td><td>Per-patient iEEG classifier (AUC 0.61); 500 ms stimulation of lateral temporal cortex when P(recall)&lt;0.5</td><td class="num">+15% relative recall (p=0.02), OR 1.18</td><td><span class="t M">EMERGING</span> <span class="h">~5 yrs</span> clinical</td></tr>
+<tr><td><a href="https://www.eneuro.org/content/5/1/ENEURO.0369-17.2018/tab-figures-data">Kucewicz et al. 2018, eNeuro</a></td><td>Humans · 22</td><td>Stimulation in 4 regions; high-gamma change tracked behaviour</td><td>Temporal cortex positive; mixed elsewhere</td><td><span class="t M">EMERGING</span></td></tr>
+<tr><td><a href="https://neurosciencenews.com/dbs-memory-neuroscience-5708/">Jacobs et al. 2016, Neuron</a> · counter-evidence</td><td>Humans · 49</td><td>50 Hz to EC/hippocampus during learning</td><td class="num">−9% (EC), −8% (hippocampus)</td><td><span class="t E">ESTABLISHED</span> (negative)</td></tr>
+<tr><td rowspan="4">Targeted memory reactivation (sleep)</td><td><a href="https://alzforum.org/node/117004">Rasch et al. 2007, Science</a> (Born lab)</td><td>Humans</td><td>Odour from learning re-presented in slow-wave sleep</td><td>Better retention after SWS cue; numbers not extracted</td><td><span class="t E">ESTABLISHED</span> family</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/19965421/">Rudoy et al. 2009, Science</a> (Paller lab)</td><td>Humans</td><td>Sounds tied to specific object locations played in sleep</td><td>Cued items better remembered (item-specific)</td><td><span class="t E">ESTABLISHED</span> family</td></tr>
+<tr><td><a href="https://faculty.wcas.northwestern.edu/paller/PsychBulletin2020.pdf">Hu et al. 2020, Psych Bull meta-analysis</a></td><td>91 experiments · N=2,004</td><td>Pooled TMR effects</td><td class="num">g=0.29 [0.21, 0.38]; SWS 0.27; N2 0.32; REM/wake ≈0</td><td><span class="t E">ESTABLISHED</span> <span class="h">now</span></td></tr>
+<tr><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3679648">Ngo et al. 2013, Neuron</a> vs <a href="https://www.eneuro.org/content/6/6/ENEURO.0306-19.2019">Henin et al. 2019, eNeuro</a></td><td>Humans · 11 vs 31</td><td>Clicks timed to slow-wave up-states</td><td class="num">Ngo: next-morning gain ~22 vs 13 pairs; Henin: oscillations up, memory no change</td><td><span class="t M">EMERGING</span>, mixed</td></tr>
+<tr><td>Closed-loop deep sleep stimulation</td><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10244181">Geva-Sagiv et al. 2023, Nat Neurosci</a></td><td>Humans · 18 (12 behaviour)</td><td>Prefrontal stimulation locked to MTL slow waves</td><td class="num">6/6 sync-stim improved recognition (p=0.01); ~10% (press)</td><td><span class="t M">EMERGING</span> <span class="h">~5 yrs</span></td></tr>
+<tr><td>Amygdala tagging</td><td><a href="https://faculty.college.emory.edu/sites/manns/pdfs/inman_et_al_pnas_2018.pdf">Inman et al. 2018, PNAS</a></td><td>Humans · 14</td><td>1 s of amygdala pulses after half the images</td><td class="num">Day-later d′ 1.60 vs 1.37, Cohen's d=0.99; immediate test no effect</td><td><span class="t M">EMERGING</span></td></tr>
+<tr><td>Brain-state-triggered learning</td><td><a href="https://ofenlab.wayne.edu/pubs/yoohindsofen2012ni.pdf">Yoo et al. 2012, NeuroImage 59:846</a></td><td>Humans · 16</td><td>Real-time fMRI of parahippocampal place area; show scene in "good" state</td><td class="num">22.3% vs 15.5% corrected recognition (p&lt;0.014)</td><td><span class="t M">EMERGING</span> · the closest noninvasive cousin of your project</td></tr>
+<tr><td rowspan="2">Brain-to-brain and new senses</td><td><a href="https://www.scientificamerican.com/blog/scicurious-brain/bringing-on-the-borg-rats/">Pais-Vieira et al. 2013, Sci Rep</a></td><td>Rats · 2–5 per group</td><td>Encoder rat's cortex activity → microstim in decoder rat</td><td class="num">~60–64% vs 50% chance</td><td><span class="t M">EMERGING</span>, weak</td></tr>
+<tr><td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3674834">Thomson, Carra &amp; Nicolelis 2013, Nat Commun 4:1482</a></td><td>Rats</td><td>Infrared sensor → somatosensory microstim</td><td class="num">41% → 93% correct with training</td><td><span class="t M">EMERGING</span> · proof that the brain learns a new input code (supports H-B3 for <em>senses</em>)</td></tr>
+</tbody></table></div>
+<p class="meta">Also checked: the term "neural co-processor" (<a href="https://arxiv.org/abs/1811.11876v1">Rao 2018 preprint</a>, published in Current Opinion in Neurobiology 2019, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6860027">PMC</a>): a device that decodes and encodes in one loop, trained jointly with the brain.</p>
+</section>
+
+<section id="d6">
+<h2>1.6 · Activate / deactivate: what is feasible, and the gap</h2>
+<div class="tbl"><table>
+<thead><tr><th>Manipulation</th><th>Animals (best case)</th><th>Humans (best case)</th><th>Gap</th></tr></thead>
+<tbody>
+<tr><td>Turn on <em>one specific memory</em></td><td>Yes: light on tagged engram cells (Liu 2012), even after Alzheimer-like loss (Roy 2016)</td><td>No. Needs gene delivery + light in hippocampus; only retinal optogenetics in one patient so far (Sahel 2021)</td><td>Huge <span class="h">20+ yrs / maybe never</span></td></tr>
+<tr><td>Implant a percept with chosen cells</td><td>Yes: ~2–20 neurons in mouse V1 (Carrillo-Reid 2019, Marshel 2019)</td><td>Crude phosphenes via cortical stimulation (vision prostheses); no chosen-cell control</td><td>Large <span class="h">20+ yrs</span></td></tr>
+<tr><td>Bias encoding of what you see now</td><td>Yes</td><td>Yes, weakly: closed-loop LTC (+15%), amygdala (d≈1 next day), patterned CA1 (+35%, n=8)</td><td>Small n, single groups <span class="h">~5 yrs</span></td></tr>
+<tr><td>Strengthen chosen memories in sleep</td><td>Yes</td><td>Yes: TMR g≈0.29, noninvasive <span class="h">now</span></td><td>Effects modest; works best for recently learned material</td></tr>
+<tr><td>Turn <em>off</em> a memory</td><td>Yes: silencing engram cells blocks recall (engram literature, Josselyn &amp; Tonegawa 2020)</td><td>Only unselectively: macro-stimulation during learning impairs (Jacobs 2016)</td><td>No selective human method <span class="h">20+ yrs</span></td></tr>
+</tbody></table></div>
+<div class="box key">
+<p><strong>The gap in one sentence:</strong> in mice we can address <em>cells</em>; in humans we can address <em>moments and regions</em>. Everything you can do from a laptop lives in measuring how much memory content is readable at each rung, which is exactly the "resolution ladder" in your Section 5.</p>
+<p><strong>Ethics flag:</strong> all human stimulation studies here ran in hospitals under ethics approval and medical-device rules. Analysing their public, de-identified data needs no approval from you; anything involving stimulating people, including DIY tDCS or sleep sound devices on others, would need approval from the Swedish Ethical Review Authority and possibly medical-device rules. Do not run it yourself.</p>
+</div>
+</section>
+
+<section id="hyp">
+<h2>Your working hypotheses, scored</h2>
+<div class="tbl"><table>
+<thead><tr><th>Hypothesis</th><th>Verdict</th><th>Surviving version</th></tr></thead>
+<tbody>
+<tr><td>H-A1 MTL is the right first target</td><td><span class="t E">ESTABLISHED</span> for reading</td><td>Right for reading; for writing with current electrodes, cortex (LTC, prefrontal) has better results.</td></tr>
+<tr><td>H-A2 Content is sparse neurons; EEG gets state</td><td><span class="t M">EMERGING</span>, mostly right</td><td>Sparse coding is well supported (concept cells). But content is partly readable at coarser scales too (category reinstatement in fMRI/iEEG), so it's a gradient, not a wall. Your ladder should measure that gradient.</td></tr>
+<tr><td>H-B1 Co-processor = artificial second hippocampus</td><td><span class="t S">SPECULATIVE</span>, well grounded</td><td>Good framing. Berger/Hampson's prosthesis is literally a model of CA3→CA1 used to drive CA1.</td></tr>
+<tr><td>H-B2 Store indices, not content</td><td><span class="t S">SPECULATIVE</span>, consistent with indexing theory</td><td>Plausible and testable in simulation (Run 3/Phase 2): how small can a cue pattern be and still complete a memory in a cortical attractor model?</td></tr>
+<tr><td>H-B3 Brain co-adapts to the device</td><td><span class="t E">ESTABLISHED</span> for motor BCIs and new senses (Thomson 2013); <span class="t U">UNVERIFIED</span> for memory</td><td>Don't assume it for memory; no memory-prosthesis study I checked showed learning of the device code.</td></tr>
+<tr><td>H-B4 Codes are personal and drift</td><td><span class="t E">ESTABLISHED</span> in mice (Ziv 2013); your SP3 shows it at scalp level</td><td>Modules need recalibration and per-person alignment. Matches your "personal &gt; pooled 19/20" result.</td></tr>
+<tr><td>H-Bridge EEG classifier = noninvasive Ezzyat decoder</td><td>Conceptually right, quantitatively weak</td><td>Ezzyat: in-brain AUC 0.61, enough to trigger. You: scalp gain 0.005, half eye-related. Frame your preprint as "how much of the encoding-state signal survives at the scalp", with Yoo 2012 (fMRI) as the other noninvasive comparison.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="refs">
+<h2>Sources checked this run</h2>
+<p class="meta">PubMed/PMC pages sometimes showed a captcha to my fetcher; in those cases I used the publisher, a university repository or a press release (linked) and say so in the tables. Your own results come from the project files and the OSF registrations (<a href="https://osf.io/9ghzn/overview">scalp EEG</a>, <a href="https://osf.io/xn4v9/overview">iEEG addendum</a>).</p>
+<ol class="refs">
+<li><a href="https://link.springer.com/10.1038/s41467-017-02753-0">Ezzyat et al. 2018, Nat Commun, doi:10.1038/s41467-017-02753-0</a></li>
+<li><a href="https://blackrockneurotech.com/direct-brain-stimulation-modulates-encoding-states-and-memory-performance-in-humans">Ezzyat et al. 2017, Curr Biol 27:1251, doi:10.1016/j.cub.2017.03.028</a></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/27930911/">Jacobs et al. 2016, Neuron</a></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5797477">Kucewicz et al. 2018, eNeuro, doi:10.1523/ENEURO.0369-17.2018</a></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/29589592/">Hampson et al. 2018, J Neural Eng</a> · <a href="https://newsroom.wakehealth.edu/news-releases/2018/03/prosthetic-memory-system-successful-in-humans-study-finds">Wake Forest release</a></li>
+<li><a href="https://public-pages-files-2025.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2024.1263311/text">Roeder et al. 2024, Front Comput Neurosci, doi:10.3389/fncom.2024.1263311</a></li>
+<li><a href="https://faculty.college.emory.edu/sites/manns/pdfs/inman_et_al_pnas_2018.pdf">Inman et al. 2018, PNAS</a></li>
+<li>Suthana et al. 2012, NEJM (named in Titiz 2017 review discussion; I did not open it this run <span class="t U">UNVERIFIED</span> details)</li>
+<li><a href="https://elifesciences.org/articles/29515">Titiz et al. 2017, eLife 6:e29515</a></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10244181">Geva-Sagiv et al. 2023, Nat Neurosci</a></li>
+<li><a href="https://www.nature.com/articles/s41593-023-01456-8.pdf">Violante et al. 2023, Nat Neurosci (temporal interference)</a> · <a href="https://surrey.ac.uk/news/new-non-invasive-form-deep-brain-stimulation-could-provide-alternative-treatment-brain-diseases">Surrey release</a></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10068908">Grover et al. 2022, Nat Neurosci (HD-tACS)</a></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/25170153/">Wang et al. 2014, Science (rTMS)</a> · <a href="https://alzforum.org/node/320211">Alzforum summary</a></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3679648">Ngo et al. 2013, Neuron (commentary page)</a> · <a href="https://www.eneuro.org/content/6/6/ENEURO.0306-19.2019">Henin et al. 2019, eNeuro</a></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/19965421/">Rudoy et al. 2009, Science</a> · <a href="https://alzforum.org/node/117004">Rasch et al. 2007, Science 315:1426</a> · <a href="https://faculty.wcas.northwestern.edu/paller/PsychBulletin2020.pdf">Hu et al. 2020, Psych Bull</a></li>
+<li><a href="https://ofenlab.wayne.edu/pubs/yoohindsofen2012ni.pdf">Yoo et al. 2012, NeuroImage 59:846</a></li>
+<li><a href="https://dspace.mit.edu/bitstream/1721.1/74651/1/Tonegawa_Optogenetic%20stimulation.pdf">Liu et al. 2012, Nature 484:381</a> · <a href="https://dspace.mit.edu/handle/1721.1/85964">Ramirez et al. 2013</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4847731">Roy et al. 2016</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7577560/">Josselyn &amp; Tonegawa 2020</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/28386011/">Kitamura et al. 2017</a></li>
+<li><a href="https://par.nsf.gov/servlets/purl/10124512">Marshel et al. 2019, Science</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6747687">Carrillo-Reid et al. 2019, Cell</a></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3584574">Pais-Vieira et al. 2013, Sci Rep</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3674834">Thomson et al. 2013, Nat Commun</a></li>
+<li><a href="https://sorbonne-universite.fr/en/news/optogenetic-methods-restore-partial-vision-blind-patient">Sahel et al. 2021, Nat Med</a> · <a href="https://www.ovid.com/journals/nejm/pdf/10.1056/nejmoa2308719~ultrasound-blood-brain-barrier-opening-and-aducanumab-in">Rezai et al. 2024, NEJM</a></li>
+<li><a href="https://www.jmir.org/2019/10/e16194">Musk 2019, JMIR</a> · <a href="https://en.wikipedia.org/wiki/Neuralink">Neuralink (Wikipedia)</a> · <a href="https://www.insidedeeptech.com/neuralink-n1-implant-r1-robot-clinical-trials-full-guide/">N1 and trials guide</a> · <a href="https://finance.yahoo.com/news/elon-musks-neuralink-says-21-182925000.html">21 participants, Jan 2026</a></li>
+<li><a href="https://bibliography.cumc.columbia.edu/node/54671">Paulk et al. 2022, Nat Neurosci 25:252</a> · <a href="https://changlab.ucsf.edu/s/1-s20-S0896627322004482-main.pdf">Chung et al. 2022, Neuron</a> · <a href="https://arxiv.org/abs/2601.09912">Brown et al. 2026 (arXiv)</a> · <a href="https://www.eurekalert.org/news-releases/1126792">Katlowitz et al. 2026, Nature</a></li>
+<li><a href="https://dandiarchive.org/dandiset/000004">DANDI 000004</a> · <a href="https://authors.library.caltech.edu/records/1frpm-7w987">Faraut et al. 2018</a> · <a href="https://dandiarchive.org/dandiset/000469">DANDI 000469</a> · <a href="https://link.springer.com/10.1038/s41597-024-02943-8">Kyzar et al. 2024</a> · <a href="https://doaj.org/article/6bfe334d1e89423fa22a175ea9192f8c">Keles et al. 2024</a> · <a href="https://memory.psych.upenn.edu/RAM_Public_Data">RAM public data</a> · <a href="https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels">Allen Visual Coding Neuropixels</a></li>
+<li><a href="https://papers.baulab.info/papers/Quiroga-2005.pdf">Quian Quiroga et al. 2005</a> · <a href="https://ideas.repec.org/a/nat/nature/v425y2003i6954d10.1038_nature01964.html">Ekstrom et al. 2003</a> · <a href="https://jacobslab.bme.columbia.edu/sites/default/files/content/pubs/UmbachEtal20.pdf">Umbach et al. 2020</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3784308">Ziv et al. 2013</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2829853">Bakker et al. 2008</a></li>
+<li><a href="https://zendy.io/title/10.1002/hipo.20350">Teyler &amp; Rudy 2007</a> · <a href="https://stanford.edu/%7Ejlmcc/papers/McCMcNaughtonOReilly95.pdf">McClelland et al. 1995</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/8036517/">Wilson &amp; McNaughton 1994</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/19749750/">Girardeau et al. 2009</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4852309">Huth et al. 2016</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/15217324/">McGaugh 2004</a></li>
+<li><a href="https://arxiv.org/abs/1811.11876v1">Rao 2018/2019, neural co-processors</a></li>
+</ol>
+</section>
+
+<section>
+<h2>Corrections to the prompt</h2>
+<ul>
+<li>Marshel 2019 is from the Deisseroth lab (Stanford). The Yuste-lab equivalent is Carrillo-Reid et al. 2019 (Cell).</li>
+<li>Roeder 2024 appeared in Frontiers in Computational Neuroscience; its content-specific effect is modest and mixed (22.4% of patient×category combinations).</li>
+<li>"Yoo et al. 2012" is Yoo, Hinds, Ofen … Gabrieli, NeuroImage 59:846 (real-time fMRI of the parahippocampal place area).</li>
+<li>Ngo 2013 has a notable non-replication of the memory benefit (Henin 2019).</li>
+<li>Neuralink: 21 participants (Jan 2026) is confirmed; anything newer I found is single-source and marked UNVERIFIED.</li>
+</ul>
+</section>
+
+</main>
+</body>
+</html>
