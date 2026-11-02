@@ -1,0 +1,270 @@
+<title>Finishing the EEG Project</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: the same lab-notebook column as Run 1; checklists carry pass/caution chips, OSF text sits in copyable blocks. */
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1b2330; --muted:#566173; --line:#d9dee6; --accent:#28507d;
+  --ok:#1f6b46; --ok-bg:#e3f2ea; --warn:#8a5a00; --warn-bg:#fbf0d9; --spec:#6a3d99; --spec-bg:#efe6f8; --bad:#a32b2b; --bad-bg:#fbe5e5;
+  --display:"IBM Plex Serif", Georgia, serif; --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161d; --surface:#18202a; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2c3846; --accent:#8db6e6;
+    --ok:#7fd1a5; --ok-bg:#173326; --warn:#f0c46a; --warn-bg:#3a2e12; --spec:#c9a6f0; --spec-bg:#2d2140; --bad:#f29a9a; --bad-bg:#3d1c1c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#18202a; --ink:#e3e8ef; --muted:#9aa6b6; --line:#2c3846; --accent:#8db6e6;
+  --ok:#7fd1a5; --ok-bg:#173326; --warn:#f0c46a; --warn-bg:#3a2e12; --spec:#c9a6f0; --spec-bg:#2d2140; --bad:#f29a9a; --bad-bg:#3d1c1c;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+main{max-width:980px;margin:0 auto;padding-block:32px 80px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.5rem;padding-top:8px;border-top:2px solid var(--accent)}
+h3{font-size:1.15rem;margin-top:6px}
+p,li{max-width:72ch}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.25rem;display:flex;flex-direction:column;gap:4px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{color:var(--muted);font-size:.92rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.box.key{border-left:4px solid var(--accent)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:680px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:none}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.02em;padding:1px 6px;border-radius:4px;white-space:nowrap;vertical-align:1px}
+.ok{color:var(--ok);background:var(--ok-bg)}
+.warn{color:var(--warn);background:var(--warn-bg)}
+.spec{color:var(--spec);background:var(--spec-bg)}
+.bad{color:var(--bad);background:var(--bad-bg)}
+code{font-family:var(--mono);font-size:.85em}
+pre{font-family:var(--mono);font-size:.82rem;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto;margin:0;line-height:1.5;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+nav ol{flex-direction:row;flex-wrap:wrap;gap:6px 16px;list-style:none;padding:0}
+.copyrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+button{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer}
+button:hover{background:var(--bg)}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat .box strong{font-family:var(--display);font-size:1.15rem}
+</style>
+
+<main>
+<header style="display:flex;flex-direction:column;gap:10px">
+<h1>Finishing the EEG project (Run 2)</h1>
+<p class="meta">Neuro memory idea · Run 2 of 5 · 2 Nov 2026 · deliverables D6–D9. Builds on <a href="https://claude.ai/artifact/9smF6wT259QAsrAdknL5SB">Run 1</a>. Numbers come from the project's result files (<code>scalp-eeg/confirmatory/</code> and the in-brain <code>RESULT.md</code>); the registered text is <a href="https://osf.io/9ghzn/overview">osf.io/9ghzn</a> (draft: <a href="https://claude.ai/artifact/QDR6hWpyKKaB38xBwLxiBN">pre-registration page</a>, also <code>docs/07-preregistration-scalp-eeg.md</code> in the repo).</p>
+<nav><ol>
+<li><a href="#where">Where things stand</a></li>
+<li><a href="#d6">D6 Pre-registration audit</a></li>
+<li><a href="#d7">D7 Exploratory plan</a></li>
+<li><a href="#d8">D8 spec.md</a></li>
+<li><a href="#d9">D9 Preprint plan</a></li>
+</ol></nav>
+</header>
+
+<section id="where">
+<h2>Where things stand (said plainly)</h2>
+<div class="box key">
+<p><strong>The prompt assumes the pre-registration is still a draft. It isn't.</strong> It was registered publicly on 22 Oct, the 20-person confirmatory run finished on 23 Oct, and the in-brain addendum (<a href="https://osf.io/xn4v9/overview">osf.io/xn4v9</a>) ran to completion on 31 Oct. Three consequences:</p>
+<ul>
+<li>The 2.1 audit below is <strong>retrospective</strong>. Nothing in the registered text can be changed now; gaps become disclosures in the paper.</li>
+<li>"Lock → unblind → confirmatory" is <strong>already done</strong>, for both datasets. What is left is: register exploratory plan → run exploratory → write up.</li>
+<li>The bridge analyses run on participants whose results are already public. They are <strong>exploratory by definition</strong> and go into a new, dated addendum. They cannot touch the verdicts.</li>
+</ul>
+</div>
+<div class="stat">
+<div class="box"><span class="meta">Scalp EEG (PEERS ltpFR, 20 people)</span><strong>Failure, present but negligible</strong><span>Mean ΔAUC 0.0050, 95% CI 0.0023 to 0.0085, below the 0.01 bar. Wilcoxon p = 5×10⁻⁵.</span></div>
+<div class="box"><span class="meta">In-brain iEEG (RAM FR1, 20 people)</span><strong>Ambiguous</strong><span>Mean ΔAUC 0.0072, 95% CI −0.0038 to 0.0236. Wilcoxon p = 0.10. 6 IDs replaced by rule.</span></div>
+<div class="box"><span class="meta">What survived the controls (scalp)</span><strong>Small, word-specific, personal</strong><span>Own-word gain beats previous-word gain (p = 8×10⁻⁵); about half matched by eye channels; personal &gt; pooled model in 19/20.</span></div>
+</div>
+<p class="meta">Hours/week and compute were not given in Run 1 either, so I still assume about 10 h/week and a laptop or free 4-core cloud machine. Rescale the dates below if that's wrong.</p>
+</section>
+
+<section id="d6">
+<h2>D6 · Pre-registration audit (retrospective)</h2>
+<p>Checked against the items an OSF "secondary data" template or AsPredicted would ask for. Verdict: <strong>all eight required items are present, explicit and were followed</strong>. Five smaller gaps need a sentence each in the paper.</p>
+<div class="tbl"><table>
+<thead><tr><th>Checklist item</th><th>In the registration?</th><th>What it says</th><th>Followed?</th></tr></thead>
+<tbody>
+<tr><td>Pilot excluded from the 20</td><td><span class="t ok">Yes</span></td><td>LTP063, LTP065, LTP066 named as pilot; "not part of the confirmatory test"</td><td><span class="t ok">Yes</span> none of the three appears in the 20</td></tr>
+<tr><td>How the 20 are selected</td><td><span class="t ok">Yes</span></td><td>Rule (EGI <code>.edf</code>, ≥12 sessions, recall 0.15–0.85) gives 149; IDs in ascending order: first 3 pilot, next 20 test. IDs listed. No replacement.</td><td><span class="t ok">Yes</span></td></tr>
+<tr><td>Within-subject cross-validation</td><td><span class="t ok">Yes</span></td><td>Leave-one-session-out; every training trial with a test-session word removed; inner 5 session-grouped folds with the same removal</td><td><span class="t ok">Yes</span></td></tr>
+<tr><td>Class imbalance</td><td><span class="t ok">Yes</span></td><td>AUC as the outcome (threshold-free, insensitive to imbalance); balanced class weights in every model</td><td><span class="t ok">Yes</span> (balanced accuracy not used; AUC is sufficient)</td></tr>
+<tr><td>Permutation test and group statistics</td><td><span class="t ok">Yes</span></td><td>One-sided Wilcoxon on ΔAUC; hierarchical bootstrap (10,000, seed 20261021); per-person permutation (200 shuffles within session × position) as sanity check only; Holm across the 2 secondaries</td><td><span class="t ok">Yes</span></td></tr>
+<tr><td>Exclusion criteria</td><td><span class="t ok">Yes</span></td><td>No artefact trial rejection; session skipped only for non-<code>.edf</code>, sample/onset mismatch, or epoch past file edge; all skips listed</td><td><span class="t warn">Deviation</span> 5 sessions skipped for duplicate event samples, a reason not on the list (see below)</td></tr>
+<tr><td>Explicit success and failure criteria</td><td><span class="t ok">Yes</span></td><td>Success, failure and ambiguous defined by p, CI bounds, the 0.01 bar and the robust model; applied by code (<code>stats.decide</code>)</td><td><span class="t ok">Yes</span> verdict reported exactly as returned</td></tr>
+<tr><td>What counts as a null</td><td><span class="t ok">Yes</span></td><td>"Failure" = 90% CI entirely below 0.01 (an equivalence-style test against the smallest effect of interest); "present but negligible" if the 95% CI also excludes 0</td><td><span class="t ok">Yes</span> this is the outcome that occurred</td></tr>
+</tbody></table></div>
+
+<div class="grid2">
+<div class="box">
+<h3>Gaps and deviations to disclose (scalp)</h3>
+<ol>
+<li><strong>Duplicate-sample skips.</strong> 5 sessions failed because two events shared a sample (MNE refused to epoch). Not a listed reason. Disclose as a deviation; 381 sessions were analysed in total (4 more had no EEG file, a listed reason).</li>
+<li><strong>Eye control threshold.</strong> The rule only said what to do if EOG gain ≥ EEG gain. The observed EOG gain was about half (0.0025 of 0.0050), with EEG − EOG still positive (p = 0.0016). The registration gives no rule for "half", so say so and describe it plainly.</li>
+<li><strong>No power analysis.</strong> Stated in the registration (sample set by compute). Repeat that in the paper; the equivalence rule is what makes the null informative.</li>
+<li><strong>Selection is ordered, not random.</strong> Ascending IDs are roughly recruitment order. Low risk, but mention it.</li>
+<li><strong>Prior contact.</strong> Behaviour files of all participants were read before registration (for selection and word recallability). Disclosed in the registration; repeat it.</li>
+</ol>
+</div>
+<div class="box">
+<h3>In-brain addendum: same check, short</h3>
+<ul>
+<li><span class="t ok">OK</span> practice IDs separate; seeded shuffle; same split logic adapted to repeated word pools; decision rule unchanged.</li>
+<li><span class="t warn">Deviation</span> 6 of 20 IDs had &lt;3 usable sessions; replaced by the registered "next ID" rule, but 2 replacements came from beyond the 5 named reserves. The rule's wording covers it; the named list didn't.</li>
+<li><span class="t warn">Deviation</span> 9 sessions skipped by schema checks; first group-stats run killed by an operator time limit and rerun unchanged.</li>
+<li><span class="t warn">Check</span> I could never open OSF from the container, so the registration at osf.io/xn4v9 was not verified by me. Please confirm it is public and timestamped before 30 Oct 20:50 UTC (start of the run).</li>
+</ul>
+</div>
+</div>
+
+<div class="box">
+<div class="copyrow"><h3>Ready-to-paste "Transparency and deviations" paragraph for the paper</h3><button type="button" data-copy="dev-text" id="copy-dev">Copy text</button></div>
+<pre id="dev-text">Both analyses were pre-registered before any confirmatory EEG was analysed (scalp EEG: osf.io/9ghzn, 22 October 2026; intracranial: osf.io/xn4v9, 23 October 2026), with the analysis code frozen and its SHA-256 checksums attached. Pilot participants (scalp: LTP063, LTP065, LTP066; intracranial: R1066P, R1168T, R1108J) were used only to develop the pipeline and are not part of either test. Changes made after looking at pilot data are listed in the registration. Deviations from the registered plans were as follows. Scalp EEG: five sessions were skipped because two events shared a sample index, which prevented epoching; this skip reason was not listed in the registration. The registered eye-channel rule covered only the case in which the eye-channel gain equals or exceeds the EEG gain; the observed eye-channel gain was about half the EEG gain, which we report descriptively. Intracranial EEG: six of the twenty test participants had fewer than three usable sessions and were replaced by the next eligible IDs in the registered shuffled order; two of these replacements came from beyond the five reserves named in the addendum. Nine sessions were skipped by the frozen schema checks. All analyses labelled exploratory were registered in a dated addendum after the confirmatory results were known and do not affect the registered verdicts.</pre>
+</div>
+</section>
+
+<section id="d7">
+<h2>D7 · Exploratory plan: E1, E2 and E5</h2>
+<p>I checked the real event files before choosing. In the pilot session file (<code>sub-LTP063_ses-0</code>), words come about every 4.0 s (3.8 to 4.2 s), word display duration is not recorded (<code>duration</code> = n/a), recall has vocal-onset events (<code>REC_WORD</code>, 114 in that session), and there is a <strong>recognition test with EEG</strong>: 160 <code>RECOG_TARGET</code> events, every one a studied word of that session, with old/new response and confidence. So E5 is possible.</p>
+<div class="tbl"><table>
+<thead><tr><th>Option</th><th>Does the data support it?</th><th>Pick?</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>E1 Pseudo-online decoding</td><td>Yes: continuous EEG, word onsets, 4 s between words</td><td><span class="t ok">Yes</span></td><td>The direct bridge to closed loop: how early, using only past data, is there any signal? Also fixes a hidden real-time problem in the frozen code (z-scoring used the whole test session).</td></tr>
+<tr><td>E2 Simulated closed-loop policy</td><td>Yes: needs only held-out predictions (regenerated with the frozen code)</td><td><span class="t ok">Yes</span></td><td>Cheapest, and turns AUC into the number a funder understands: extra words remembered per list. Its theory curve says what AUC a future device needs.</td></tr>
+<tr><td>E3 Personal vs universal code</td><td>Yes</td><td><span class="t warn">Already done</span></td><td>Registered Secondary 1: personal model beat the pooled one in 19/20 (mean +0.025 AUC, Holm p = .0002). Report it as registered; rerunning it under a new name would double-count.</td></tr>
+<tr><td>E4 Spectral vs ERP features</td><td>Yes</td><td><span class="t warn">Deferred</span></td><td>Your Fourier question is good, but this is a feature comparison, not a bridge, and the pipeline already is spectral. Can reuse E1's data later at low cost.</td></tr>
+<tr><td>E5 Item-level fingerprint (encoding–retrieval similarity)</td><td>Yes, via the recognition test; free-recall epochs are vocal and unsuitable</td><td><span class="t ok">Yes</span></td><td>This is the "memory fingerprint" itself: does a word's own encoding pattern reappear when the same word is recognised, more than other words from its list?</td></tr>
+</tbody></table></div>
+
+<div class="grid2">
+<div class="box"><h3>E1 in one paragraph</h3><p>For end-times 0.0 to 1.6 s after word onset (0.1 s steps) and one pre-word window, compute power from data <em>before</em> that moment only, z-score with training-session statistics only, refit the registered models per end-time. Report the earliest time at which EEG-only AUC, and separately ΔAUC, reliably exceeds chance, plus the same curve from eye channels. Expectation from the confirmatory result <span class="t spec">SPECULATIVE</span>: EEG-only AUC rises above 0.5, ΔAUC stays near 0.</p></div>
+<div class="box"><h3>E2 in one paragraph</h3><p>Pick k words per list to "re-present": at random, by the non-neural model, by the combined model, by EEG alone, or by an oracle. Assume a re-presented, otherwise-forgotten word becomes recalled with probability b (swept 0.1 to 0.5, no literature value assumed). The key number is combined minus non-neural: the extra words recalled that EEG is responsible for. A theory curve marks scalp, in-brain (0.570) and Ezzyat 2018 (0.61) AUCs.</p></div>
+<div class="box"><h3>E5 in one paragraph</h3><p>Pattern = channels × 8 frequencies, 0.2 to 1.6 s after the word appears. For each studied word: correlation between its encoding and recognition patterns, minus its correlation with other same-list words' recognition patterns. Test whether that item-specific similarity is above 0, and whether it is larger for confident hits and for recalled words. Repeat on eye channels. Caveat: recalled words were also retrieved during free recall, before the recognition test.</p></div>
+<div class="box"><h3>How a finding becomes real</h3><p>Only 23 of the 149 eligible ltpFR participants have had their EEG opened. If E5 (or E1) shows something, write a new pre-registration with a fixed test and a smallest effect of interest, freeze the code, and run it once on the <strong>next 20 IDs</strong>. That is a clean confirmatory test of an exploratory finding, with no new data collection.</p></div>
+</div>
+
+<div class="box">
+<div class="copyrow"><h3>OSF addendum text (post as a dated public file before running anything)</h3><button type="button" data-copy="osf-text" id="copy-osf">Copy text</button></div>
+<pre id="osf-text">Exploratory addendum 2 to "EEG at Study Predicts Later Recall" (osf.io/9ghzn). Date: [posting date].
+
+Status at the time of writing. The registered confirmatory analysis has been run (verdict: failure, present but negligible; mean ΔAUC 0.005). The intracranial addendum (osf.io/xn4v9) has been run (verdict: ambiguous). The analyses below were planned after these results were known. They are exploratory, run on the same 20 confirmatory participants, and cannot change either verdict. The frozen confirmatory code is not modified; new code is in a separate folder and will be frozen (SHA-256 list) after testing on the 3 pilot participants and before running on the 20.
+
+E1, pseudo-online decoding. Power at the 8 registered frequencies computed from causal windows ending 0.0 to 1.6 s after word onset (0.1 s steps) and from a pre-stimulus window ending at word onset; z-scoring uses training sessions only. Registered models and cross-validation, refitted per end-time. Outcomes: EEG-only AUC and ΔAUC per end-time (hierarchical bootstrap 95% CI); earliest end-time after which the CI stays above chance; the same for the 4 EOG channels.
+
+E2, simulated re-presentation policy. Using regenerated held-out predictions from the frozen code (required to reproduce the frozen AUCs to 4 decimals), choose k = 1, 2, 3 words per list by: random, non-neural, combined, EEG-only, oracle. Assumed benefit: a chosen word that was not recalled becomes recalled with probability b = 0.1, 0.2, 0.3, 0.5. Outcome: expected extra words recalled per list; key contrast combined minus non-neural. Plus an analytic curve of extra recall against classifier AUC under a binormal model.
+
+E5, item-level encoding–recognition similarity. Feature vectors (channels × 8 frequencies, 0.2–1.6 s) at study and at the recognition-test presentation of the same word (RECOG_TARGET events). Item-specific similarity = r(own encoding, own recognition) − mean r(own encoding, recognition of other words from the same list). Tests: mean item-specific similarity > 0 across participants (one-sample Wilcoxon); within-person difference by recognition confidence and by recall status; the same on EOG channels.
+
+Not run: personal versus pooled decoding (already registered and reported as Secondary 1); spectral versus ERP features (deferred).
+
+Any exploratory effect will be described as exploratory. A confirmatory test, if warranted, will be pre-registered separately and run on the next 20 eligible participants (ascending ID), whose EEG has not been opened.</pre>
+</div>
+</section>
+
+<section id="d8">
+<h2>D8 · spec.md for Claude Code</h2>
+<div class="box key">
+<p>The spec is a file in the repo: <a href="https://github.com/vishvamcode/memory-fingerprint/blob/claude/project-thread-f6pj8t/scalp-eeg-exploratory/spec.md"><code>scalp-eeg-exploratory/spec.md</code></a> (branch <code>claude/project-thread-f6pj8t</code>), and a copy in the project files at <code>neuro-roadmap-runs/spec.md</code>. Open Claude Code in the repo and say "implement scalp-eeg-exploratory/spec.md, starting with section 1".</p>
+<ul>
+<li><strong>Rule 0:</strong> never edit <code>scalp-eeg/</code> (frozen); a test checks its hashes.</li>
+<li><strong>Inspect first:</strong> a table of 8 checks on the real files (columns, event types, timing, recognition targets inside the recording, duplicate samples), saved before any analysis code.</li>
+<li><strong>Stage X0:</strong> the frozen run's per-word predictions were lost with the old cloud container. X0 regenerates them with the frozen code and must reproduce the frozen AUCs to 4 decimals, or stop.</li>
+<li><strong>One download pass</strong> per session computes everything E1 and E5 need, then deletes the file. Budget: roughly 15–20 hours for 381 sessions on 4 cores.</li>
+<li><strong>Order:</strong> post addendum → build on pilot → freeze and tag → run on the 20 → (optional) pre-register and run on the next 20.</li>
+<li>Includes tests, a 10-item reproducibility checklist and 6 exploratory figures.</li>
+</ul>
+</div>
+</section>
+
+<section id="d9">
+<h2>D9 · Preprint plan (6–8 pages)</h2>
+<div class="box key">
+<p><strong>Recommendation:</strong> one preprint with <em>both</em> registered tests. Scalp and in-brain recordings, same question, same models, same rule: that is the first rung of your resolution ladder, and it is a stronger paper than either half.</p>
+<p><strong>Working title:</strong> "How much does brain activity during study add to predicting later recall? Two pre-registered tests with scalp and intracranial EEG"</p>
+<p><strong>Server:</strong> bioRxiv (Neuroscience) or PsyArXiv; both host pre-registered null results. Check each server's current submission rules when you post. Licence CC-BY. Link the OSF registrations, the repo and the frozen zips.</p>
+</div>
+
+<div class="tbl"><table>
+<thead><tr><th>Section</th><th>Pages</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Abstract</td><td class="num">0.3</td><td>Question, two pre-registered tests, both verdicts with numbers, one sentence on what it means for closed-loop memory support</td></tr>
+<tr><td>Introduction</td><td class="num">1</td><td>Subsequent-memory effects; closed-loop stimulation used an in-brain encoding decoder (Ezzyat 2018, AUC 0.61, +15% recall); the open question is how much a noninvasive decoder adds <em>beyond what behaviour already predicts</em>. Why the baseline matters: serial position alone predicts a lot</td></tr>
+<tr><td>Methods</td><td class="num">2</td><td>Datasets (ds004395 v2.0.0; ds004789 v3.1.0), selection, labels from <code>REC_WORD</code>, non-neural model, features, stacked model, splits with word removal, decision rule, controls, deviations paragraph (D6)</td></tr>
+<tr><td>Results: confirmatory</td><td class="num">1.5</td><td>Verdicts first, then controls (eye, previous word, no-task lists), personal vs pooled, recognition slope, in-brain comparison</td></tr>
+<tr><td>Results: exploratory</td><td class="num">1</td><td>E1, E2, E5, clearly headed "Exploratory (registered after the confirmatory results)"</td></tr>
+<tr><td>Discussion</td><td class="num">1</td><td>What a 0.005 AUC gain means in words remembered (E2); scalp vs in-brain; eye artefacts; personal codes; limits; next steps</td></tr>
+<tr><td>Data and code availability</td><td class="num">0.2</td><td>Repo, frozen zips with SHA-256, OSF links</td></tr>
+</tbody></table></div>
+
+<div class="tbl"><table>
+<thead><tr><th>Fig.</th><th>Content</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Design: trial timeline (study word, ~4 s spacing, distractor, free recall, recognition), models (non-neural, EEG, stacked) and the split (held-out session × held-out words)</td><td><span class="t warn">To draw</span></td></tr>
+<tr><td>2</td><td>Primary result: per-participant ΔAUC dots with group mean and 90/95% CIs, the 0.01 bar shaded; scalp and in-brain side by side</td><td><span class="t ok">Data exist</span> (<code>confirmatory_auc.png</code> is a start)</td></tr>
+<tr><td>3</td><td>Controls: EEG vs EOG gain, own-word vs previous-word gain, no-task lists</td><td><span class="t ok">Data exist</span></td></tr>
+<tr><td>4</td><td>Personal vs pooled EEG-only AUC, 20 paired lines</td><td><span class="t ok">Data exist</span></td></tr>
+<tr><td>5</td><td>E1 time course (causal AUC and ΔAUC vs time)</td><td><span class="t spec">After exploratory run</span></td></tr>
+<tr><td>6</td><td>E2: extra recall per list by policy, plus the AUC-to-benefit curve with scalp, in-brain and Ezzyat AUCs marked</td><td><span class="t spec">After exploratory run</span> (curve can be drawn now)</td></tr>
+<tr><td>S1–S3</td><td>E5 similarity; per-person tables; skipped sessions</td><td><span class="t spec">After exploratory run</span></td></tr>
+</tbody></table></div>
+
+<div class="grid2">
+<div class="box">
+<h3>Writing up the null</h3>
+<ul>
+<li>Lead with the verdict and the rule that produced it, then the numbers. Don't bury it.</li>
+<li>Say what the null rules out: a gain of 0.01 AUC or more, on average, for this pipeline and this kind of person and task. It does not rule out other features, other people, or in-brain recordings (which came out ambiguous).</li>
+<li>Translate it: E2 gives the size in words per list. "About X extra words per 100 studied" is clearer than "ΔAUC 0.005".</li>
+<li>Report that a small, real, word-specific signal exists (own > previous word; 95% CI excludes 0) and that about half of it is matched by eye channels.</li>
+<li>No spin words like "trend", "promising" or "nearly significant" for the confirmatory results.</li>
+</ul>
+</div>
+<div class="box">
+<h3>Framing: "a first step toward closed-loop memory support"</h3>
+<ul>
+<li><span class="t ok">Say</span> "we measured how much information a noninvasive encoding-state decoder adds over behaviour, the quantity a closed-loop system depends on".</li>
+<li><span class="t ok">Say</span> "scalp EEG, as analysed here, adds too little to justify triggering an intervention; intracranial data were inconclusive".</li>
+<li><span class="t bad">Don't</span> say the method "reads memories", "predicts memory" without the baseline, or "could help Alzheimer's patients".</li>
+<li><span class="t bad">Don't</span> present E1, E2 or E5 as confirmatory, even if they look strong.</li>
+</ul>
+</div>
+</div>
+
+<div class="box">
+<h3>Timeline at ~10 h/week (rescale if needed)</h3>
+<div class="tbl" style="border:none"><table style="min-width:520px">
+<thead><tr><th>Week of</th><th>Step</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td class="num">2 Nov</td><td>Post exploratory addendum on OSF; confirm in-brain registration is public</td><td>OSF file</td></tr>
+<tr><td class="num">9 Nov</td><td>Claude Code: inspection report, X0 reproduction, pilot build, tests, freeze</td><td>Tagged repo</td></tr>
+<tr><td class="num">16 Nov</td><td>Exploratory run on the 20 (~20 h machine time); figures 2–4 drafted</td><td>Figures</td></tr>
+<tr><td class="num">23 Nov – 7 Dec</td><td>Write methods and confirmatory results; then exploratory results and discussion</td><td>Draft</td></tr>
+<tr><td class="num">14 Dec</td><td>Read-through by someone outside the project; post preprint</td><td>Preprint #1</td></tr>
+</tbody></table></div>
+</div>
+</section>
+</main>
+
+<script>
+document.querySelectorAll('button[data-copy]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.getAttribute('data-copy'));
+    var text = el.textContent;
+    var done = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy text'; }, 1500); };
+    var fallback = function(){ var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected, press Ctrl+C'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
